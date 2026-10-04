@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apuração 2026 – Presidente</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--tx:#14181f;--mut:#667085;--bd:#e3e6ea;--ac:#1a56db;--bar:#1a56db;--g:#16a34a;--r:#dc2626}
+@media (prefers-color-scheme:dark){:root{--bg:#0e1116;--card:#171b22;--tx:#eef0f3;--mut:#98a2b3;--bd:#262c36;--ac:#6ea0ff;--bar:#4f86f7}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:16px}
+h1{font-size:20px;margin:0 0 4px}
+.sub{color:var(--mut);font-size:13px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:14px 0}
+button,select{font:inherit;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:9px 12px;border-radius:10px}
+button{cursor:pointer}
+button.pri{background:var(--ac);color:#fff;border-color:var(--ac)}
+button.on{background:var(--g);color:#fff;border-color:var(--g)}
+button:disabled{opacity:.6}
+.tabs{display:flex;gap:8px;margin-bottom:10px}.tabs button{flex:1}
+.tabs button.act{background:var(--ac);color:#fff;border-color:var(--ac)}
+.tabs button[disabled]{opacity:.55;cursor:not-allowed}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.st{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px}
+.st b{display:block;font-size:18px}.st span{font-size:12px;color:var(--mut)}
+.c{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:10px;margin-bottom:8px}
+.pos{font-weight:700;color:var(--mut);width:22px;text-align:center}
+.ph{width:56px;height:56px;border-radius:50%;object-fit:cover;background:var(--bd);flex:none;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--mut)}
+.info{flex:1;min-width:0}
+.nm{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pt{font-size:12px;color:var(--mut)}
+.tr{height:8px;background:var(--bd);border-radius:6px;margin-top:6px;overflow:hidden}
+.fl{height:100%;background:var(--bar);transition:width .6s}
+.v{text-align:right;flex:none;position:relative}
+.v b{font-size:18px;display:block}.v span{font-size:12px;color:var(--mut)}
+.chip{position:absolute;right:0;top:-6px;color:var(--g);font-weight:700;font-size:13px;animation:rise 2.6s ease-out forwards;pointer-events:none}
+.pd{font-size:11px;font-weight:700;margin-left:4px;white-space:nowrap}
+.pd.g{color:var(--g)}.pd.r{color:var(--r)}.pd.z{color:var(--mut)}
+.badge{font-size:11px;background:var(--g);color:#fff;border-radius:6px;padding:1px 6px;margin-left:6px}
+#msg{font-size:13px;margin:8px 0;color:var(--mut)}#msg.err{color:var(--r)}
+.box{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
+.cfg{display:none}.cfg.show{display:block}
+.cfg label{display:block;font-size:12px;color:var(--mut);margin:10px 0 4px}
+.cfg select{width:100%}
+.cfg .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.srow{display:grid;grid-template-columns:1fr 1.2fr auto;gap:8px;align-items:center;margin-top:8px;font-size:14px}
+.cfg .test{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.cmp h2{font-size:14px;margin:0 0 10px;color:var(--mut);font-weight:600}
+.cmp .row{display:flex;justify-content:space-between;gap:8px;text-align:center}
+.cmp .row>div{flex:1;min-width:0}.cmp .row b{display:block;font-size:20px}.cmp .row span{font-size:12px;color:var(--mut)}
+.cmp .row .nm{font-size:14px}
+.cmp .df{margin-top:12px;padding-top:12px;border-top:1px solid var(--bd);text-align:center;position:relative}
+.cmp .df b{font-size:28px;display:block}
+.cmp .lead{font-size:13px;color:var(--mut)}
+.cmp .delta{margin-top:8px;font-weight:700;font-size:15px;min-height:22px}
+.delta.down{color:var(--g)}.delta.up{color:var(--r)}.delta.flip{color:#d97706}.delta.eq{color:var(--mut)}
+.pop{animation:pop .6s ease-out}
+.fgreen{animation:fg 1.2s ease-out}.fred{animation:fr 1.2s ease-out}.fflip{animation:fy 1.6s ease-out,shake .6s}
+#dchip{position:absolute;left:50%;top:0;font-weight:800;font-size:18px;opacity:0;pointer-events:none}
+#dchip.go{animation:rise 2.6s ease-out forwards}
+@keyframes pop{0%{transform:scale(.7);opacity:0}40%{transform:scale(1.18)}100%{transform:scale(1);opacity:1}}
+@keyframes rise{0%{opacity:0;transform:translateY(10px)}15%{opacity:1}100%{opacity:0;transform:translateY(-40px)}}
+@keyframes fg{0%{box-shadow:0 0 0 0 rgba(22,163,74,.8)}100%{box-shadow:0 0 0 26px rgba(22,163,74,0)}}
+@keyframes fr{0%{box-shadow:0 0 0 0 rgba(220,38,38,.8)}100%{box-shadow:0 0 0 26px rgba(220,38,38,0)}}
+@keyframes fy{0%{box-shadow:0 0 0 0 rgba(217,119,6,.9)}100%{box-shadow:0 0 0 34px rgba(217,119,6,0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tabs"><button class="act">1º turno</button><button disabled>2º turno · em breve</button></div>
+  <h1>Apuração 2026 · Presidente · Brasil</h1>
+  <div class="sub" id="gen">Carregando…</div>
+  <div class="bar">
+    <button class="pri" id="btn">⟳ Atualizar</button>
+    <button id="auto">Automático (1s): desligado</button>
+    <button id="snd" class="on">🔔 Alerta: ligado</button>
+    <button id="cfgBtn">⚙ Comparação e sons</button>
+  </div>
+  <div id="msg"></div>
+
+  <div class="box cfg" id="cfg">
+    <label>Candidatos a comparar</label>
+    <div class="two"><select id="selA"></select><select id="selB"></select></div>
+    <label>Sons (toca quando a % de cada um sobe)</label>
+    <div class="srow"><span id="l1">Só o 1º ganhou %</span><select id="som1"></select><button id="t1">▶</button></div>
+    <div class="srow"><span id="l2">Só o 2º ganhou %</span><select id="som2"></select><button id="t2">▶</button></div>
+    <div class="srow"><span>Os dois ganharam %</span><select id="som12"></select><button id="t12">▶</button></div>
+  </div>
+
+  <div class="box cmp" id="cmp">
+    <h2 id="cmpT">Comparação</h2>
+    <div class="row">
+      <div><div class="nm" id="nA">–</div><b id="vA">0</b><span id="pA">–</span></div>
+      <div><div class="nm" id="nB">–</div><b id="vB">0</b><span id="pB">–</span></div>
+    </div>
+    <div class="df"><span id="dchip"></span><b id="dif">0</b><span class="lead" id="lead">votos de diferença</span>
+      <div class="delta" id="delta"></div></div>
+  </div>
+
+  <div class="stats">
+    <div class="st"><b id="s1">–</b><span>Seções totalizadas</span></div>
+    <div class="st"><b id="s2">–</b><span>Votos válidos</span></div>
+    <div class="st"><b id="s3">–</b><span>Brancos + nulos</span></div>
+  </div>
+  <div id="list"></div>
+  <p class="sub">Dados oficiais do TSE (resultados.tse.jus.br). Site independente, sem vínculo oficial.</p>
+</div>
+<script>
+const URL_TSE="https://resultados.tse.jus.br/oficial/ele2026/6257/dados/br/br-c0001-e006257-u.json";
+const FOTO=s=>`https://resultados.tse.jus.br/oficial/ele2026/6257/fotos/br/${s}.jpeg`;
+const $=id=>document.getElementById(id);
+const num=s=>parseInt(String(s||"0").replace(/\./g,""),10)||0;
+const pct=s=>parseFloat(String(s).replace(",","."))||0;
+const fmt=n=>n.toLocaleString("pt-BR");
+const cap=s=>String(s).toLowerCase().replace(/(^|\s)\S/g,m=>m.toUpperCase());
+const SONS=[["e","🎉 EEEEE (alegre)"],["o","😢 OOOOO (triste)"],["d","🔔 Ding-dong (sino)"],["off","🔇 Nenhum"]];
+
+/* ---------- configuração (salva no navegador) ---------- */
+let cfg={a:"13",b:"22",s1:"e",s2:"o",s12:"d"};
+try{Object.assign(cfg,JSON.parse(localStorage.getItem("cfgVotos")||"{}"));}catch(e){}
+const salvar=()=>{try{localStorage.setItem("cfgVotos",JSON.stringify(cfg));}catch(e){}};
+
+/* ---------- áudio ---------- */
+let ctx=null,master=null,somOn=true;
+function destravar(){
+  try{
+    if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();
+      const comp=ctx.createDynamicsCompressor();master=ctx.createGain();master.gain.value=1.6;
+      master.connect(comp);comp.connect(ctx.destination);}
+    if(ctx.state==="suspended")ctx.resume();
+  }catch(e){}
+}
+// voz sintética: serra + filtros de formantes (soa como vogal)
+function vogal(t,dur,f0a,f0b,formantes,vibHz,vibDepth,vol){
+  const o=ctx.createOscillator();o.type="sawtooth";
+  o.frequency.setValueAtTime(f0a,t);o.frequency.exponentialRampToValueAtTime(f0b,t+dur);
+  const lfo=ctx.createOscillator(),lg=ctx.createGain();lfo.frequency.value=vibHz;lg.gain.value=vibDepth;
+  lfo.connect(lg);lg.connect(o.frequency);
+  const env=ctx.createGain();
+  const att=Math.min(.03,dur*.2),rel=Math.min(.08,dur*.4);
+  env.gain.setValueAtTime(0,t);env.gain.linearRampToValueAtTime(vol,t+att);
+  env.gain.setValueAtTime(vol,t+dur-rel);env.gain.linearRampToValueAtTime(0,t+dur);
+  formantes.forEach(([f,q,g])=>{
+    const bp=ctx.createBiquadFilter();bp.type="bandpass";bp.frequency.value=f;bp.Q.value=q;
+    const gg=ctx.createGain();gg.gain.value=g;o.connect(bp);bp.connect(gg);gg.connect(env);
+  });
+  env.connect(master);o.start(t);lfo.start(t);o.stop(t+dur+.05);lfo.stop(t+dur+.05);
+}
+const FE=[[320,10,9],[2300,12,7]], FO=[[450,10,9],[820,10,7]];
+function tocar(nome,forcar){
+  if((!somOn&&!forcar)||nome==="off")return;
+  destravar();if(!ctx)return;
+  const t=ctx.currentTime+.02;
+  if(nome==="e"){            // notificação ALEGRE: 3 "iii" agudos subindo, rápidos (~0.5s)
+    vogal(t,.14,800,950,FE,0,0,1);
+    vogal(t+.17,.14,1000,1200,FE,0,0,1);
+    vogal(t+.34,.26,1300,1700,FE,9,25,1);
+    [2093,2637,3136].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type="triangle";o.frequency.value=f;
+      g.gain.setValueAtTime(.5,t+i*.17);g.gain.exponentialRampToValueAtTime(.001,t+i*.17+.2);o.connect(g);g.connect(master);o.start(t+i*.17);o.stop(t+i*.17+.22);});
+    try{navigator.vibrate&&navigator.vibrate([80,60,80,60,160]);}catch(x){}
+  }else if(nome==="o"){      // notificação TRISTE: 2 "ooo" graves descendo, lentos e escuros (~0.7s)
+    vogal(t,.28,240,200,FO,5,6,1.2);
+    vogal(t+.3,.45,190,100,FO,4,8,1.3);
+    try{navigator.vibrate&&navigator.vibrate([400]);}catch(x){}
+  }else if(nome==="d"){      // SINO ding-dong (médio, metálico, diferente das vozes)
+    [[880,0],[659,.28]].forEach(([f,d])=>{[1,2.76].forEach((m,k)=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();o.type="sine";o.frequency.value=f*m;
+      g.gain.setValueAtTime(k?.25:.9,t+d);g.gain.exponentialRampToValueAtTime(.001,t+d+.5);
+      o.connect(g);g.connect(master);o.start(t+d);o.stop(t+d+.55);});});
+    try{navigator.vibrate&&navigator.vibrate([120,80,120]);}catch(x){}
+  }else{                     // bipe simples (empate)
+    for(let i=0;i<3;i++){const o=ctx.createOscillator(),g=ctx.createGain();o.type="square";o.frequency.value=900;
+      g.gain.setValueAtTime(.8,t+i*.3);g.gain.setValueAtTime(0,t+i*.3+.2);o.connect(g);g.connect(master);o.start(t+i*.3);o.stop(t+i*.3+.22);}
+  }
+}
+document.addEventListener("click",destravar);
+
+/* ---------- busca de dados ---------- */
+const FONTES=[
+  u=>u,
+  u=>"https://api.allorigins.win/raw?url="+encodeURIComponent(u),
+  u=>"https://corsproxy.io/?url="+encodeURIComponent(u),
+  u=>"https://api.codetabs.com/v1/proxy/?quest="+encodeURIComponent(u),
+  u=>"https://thingproxy.freeboard.io/fetch/"+u
+];
+let ultimaOk=0;
+async function getJSON(){
+  const erros=[],ordem=FONTES.map((f,i)=>i);
+  ordem.unshift(...ordem.splice(ultimaOk,1));
+  for(const i of ordem){
+    try{
+      const r=await Promise.race([fetch(FONTES[i](URL_TSE)),new Promise((_,rej)=>setTimeout(()=>rej(new Error("tempo esgotado")),8000))]);
+      if(!r.ok)throw new Error("HTTP "+r.status);
+      const j=JSON.parse(await r.text());ultimaOk=i;return j;
+    }catch(e){erros.push("#"+(i+1)+": "+e.message);}
+  }
+  throw new Error("nenhuma fonte respondeu ("+erros.join(" | ")+")");
+}
+
+/* ---------- utilidades de animação ---------- */
+function animar(el,cls){el.classList.remove(cls);void el.offsetWidth;el.classList.add(cls);}
+function contar(el,para){
+  const de=Number(el.dataset.v||0);el.dataset.v=para;
+  if(de===para){el.textContent=fmt(para);return;}
+  const t0=performance.now(),dur=800;
+  (function f(t){const k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,3);
+    el.textContent=fmt(Math.round(de+(para-de)*e));if(k<1)requestAnimationFrame(f);})(t0);
+}
+
+/* ---------- render ---------- */
+let prevPct={},pctDelta={};
+function pdHTML(sq){
+  const d=pctDelta[sq];if(d===undefined)return "";
+  const t=Math.abs(d).toFixed(2).replace(".",",");
+  return d>0?`<span class="pd g">▲ +${t}</span>`:d<0?`<span class="pd r">▼ −${t}</span>`:`<span class="pd z">= 0,00</span>`;
+}
+let sigAnt=null,prevVotos={},prevCmp=null,jaPreencheu="";
+function preencherSelects(cands){
+  const chave=cands.map(c=>c.n).join(",");if(chave===jaPreencheu)return;jaPreencheu=chave;
+  const op=cands.map(c=>`<option value="${c.n}">${cap(c.nmu)} (${c.n})</option>`).join("");
+  $("selA").innerHTML=op;$("selB").innerHTML=op;
+  if(!cands.find(c=>c.n===cfg.a))cfg.a=cands[0].n;
+  if(!cands.find(c=>c.n===cfg.b))cfg.b=(cands[1]||cands[0]).n;
+  $("selA").value=cfg.a;$("selB").value=cfg.b;
+}
+function renderLista(cands,mudou){
+  const max=Math.max(1,...cands.map(c=>pct(c.pvap)));
+  if(mudou)cands.forEach(c=>{const a=prevPct[c.sqcand];if(a!==undefined)pctDelta[c.sqcand]=Math.round((pct(c.pvap)-a)*100)/100;});
+  $("list").innerHTML=cands.map((c,i)=>{
+    const p=pct(c.pvap),v=num(c.vap),ant=prevVotos[c.sqcand],d=mudou&&ant!==undefined?v-ant:0;
+    const ini=(c.nmu||"?").split(" ").map(w=>w[0]).slice(0,2).join("");
+    return `<div class="c"><div class="pos">${i+1}</div>
+      <img class="ph" src="${FOTO(c.sqcand)}" alt="" onerror="this.outerHTML='<div class=\\'ph\\'>${ini}</div>'">
+      <div class="info"><div class="nm">${c.nmu}${c.e==="s"?'<span class="badge">ELEITO</span>':""}</div>
+      <div class="pt">${c.n} · ${c.sg}${c.vice?" · vice "+c.vice:""}</div>
+      <div class="tr"><div class="fl" style="width:${(p/max*100).toFixed(1)}%"></div></div></div>
+      <div class="v">${d>0?`<span class="chip">+${fmt(d)}</span>`:""}<b>${fmt(v)}</b><span>${c.pvap}%${pdHTML(c.sqcand)}</span></div></div>`;
+  }).join("");
+  cands.forEach(c=>{prevVotos[c.sqcand]=num(c.vap);prevPct[c.sqcand]=pct(c.pvap);});
+}
+function renderComparacao(cands,mudou){
+  const A=cands.find(c=>c.n===cfg.a),B=cands.find(c=>c.n===cfg.b);
+  if(!A||!B||A===B){$("cmpT").textContent="Escolha dois candidatos diferentes";return "";}
+  const va=num(A.vap),vb=num(B.vap),s=va-vb,ab=Math.abs(s);
+  const nA=cap(A.nmu),nB=cap(B.nmu);
+  $("cmpT").textContent=`${nA} × ${nB}`;
+  $("nA").textContent=nA;$("nB").textContent=nB;$("l1").textContent="Só "+nA+" ganhou %";$("l2").textContent="Só "+nB+" ganhou %";
+  $("pA").innerHTML=A.pvap+"%"+pdHTML(A.sqcand);$("pB").innerHTML=B.pvap+"%"+pdHTML(B.sqcand);
+  contar($("vA"),va);contar($("vB"),vb);contar($("dif"),ab);
+  const lider=s>0?"a":s<0?"b":"";
+  $("lead").textContent=s===0?"empate técnico":`${s>0?nA:nB} na frente · diferença de ${Math.abs(pct(A.pvap)-pct(B.pvap)).toFixed(2).replace(".",",")} p.p.`;
+  const chave=cfg.a+"-"+cfg.b,dl=$("delta"),card=$("cmp"),chip=$("dchip");
+  if(mudou&&prevCmp&&prevCmp.chave===chave){
+    const d=ab-Math.abs(prevCmp.s),flip=prevCmp.s!==0&&s!==0&&Math.sign(prevCmp.s)!==Math.sign(s);
+    let cls,txt,anim;
+    if(flip){cls="flip";txt=`🔄 VIROU! ${s>0?nA:nB} passou à frente`;anim="fflip";}
+    else if(d<0){cls="down";txt=`▼ ${(s>0?nB:nA)} diminuiu ${fmt(-d)} votos de diferença`;anim="fgreen";}
+    else if(d>0){cls="up";txt=`▲ ${(s>0?nA:nB)} abriu mais ${fmt(d)} votos`;anim="fred";}
+    else{cls="eq";txt="= diferença igual";anim="";}
+    dl.className="delta "+cls;dl.textContent=txt;animar(dl,"pop");
+    if(anim){card.classList.remove("fgreen","fred","fflip");void card.offsetWidth;card.classList.add(anim);}
+    if(d!==0){chip.textContent=(d<0?"−":"+")+fmt(Math.abs(d));chip.style.color=d<0?"var(--g)":"var(--r)";
+      chip.classList.remove("go");void chip.offsetWidth;chip.classList.add("go");}
+  }
+  prevCmp={chave,s};
+  return lider;
+}
+function render(d){
+  const cands=[];
+  (d.carg[0].agr||[]).forEach(a=>(a.par||[]).forEach(p=>(p.cand||[]).forEach(c=>{
+    cands.push({...c,sg:p.sg,vice:(c.vs&&c.vs[0]&&c.vs[0].nmu)||""});})));
+  cands.sort((a,b)=>num(b.vap)-num(a.vap)||num(a.seq)-num(b.seq));
+  $("gen").textContent=`Última totalização do TSE: ${d.dg} às ${d.hg} · atualizado na tela às ${new Date().toLocaleTimeString("pt-BR")}`;
+  $("s1").textContent=d.s.pst+"%";
+  $("s2").textContent=fmt(num(d.v.vv));
+  $("s3").textContent=fmt(num(d.v.vb)+num(d.v.vn));
+  const sig=cands.map(c=>c.sqcand+":"+c.vap).join("|")+"|"+d.v.vv+"|"+d.v.vb+"|"+d.v.vn+"|"+d.s.st+"|"+d.hg+"|"+cfg.a+cfg.b;
+  if(sig===sigAnt)return;
+  const mudou=sigAnt!==null;
+  preencherSelects(cands);
+  renderLista(cands,mudou);
+  const lider=renderComparacao(cands,mudou);
+  if(mudou){
+    const A=cands.find(c=>c.n===cfg.a),B=cands.find(c=>c.n===cfg.b);
+    if(A&&B&&A!==B){
+      const ga=(pctDelta[A.sqcand]||0)>0,gb=(pctDelta[B.sqcand]||0)>0;
+      if(ga&&gb)tocar(cfg.s12);else if(ga)tocar(cfg.s1);else if(gb)tocar(cfg.s2);
+    }
+  }
+  sigAnt=sig;
+}
+
+/* ---------- atualização ---------- */
+let busy=false,timer=null,ultimo=null;
+async function atualizar(){
+  if(busy)return;busy=true;$("btn").disabled=true;
+  try{ultimo=await getJSON();$("msg").textContent="";render(ultimo);}
+  catch(e){$("msg").className="err";$("msg").textContent="Erro: "+e.message+". Tente novamente.";}
+  busy=false;$("btn").disabled=false;
+}
+function setAuto(on){
+  clearInterval(timer);$("auto").classList.toggle("on",on);
+  $("auto").textContent="Automático (1s): "+(on?"ligado":"desligado");
+  if(on){timer=setInterval(atualizar,1000);atualizar();}
+}
+
+/* ---------- controles ---------- */
+["1","2","12"].forEach(k=>{
+  const sel=$("som"+k);
+  sel.innerHTML=SONS.map(([v,l])=>`<option value="${v}">${l}</option>`).join("");
+  sel.value=cfg["s"+k];
+  $("t"+k).onclick=()=>tocar(sel.value,true);
+});
+$("btn").onclick=atualizar;
+$("auto").onclick=()=>setAuto(!$("auto").classList.contains("on"));
+$("cfgBtn").onclick=()=>$("cfg").classList.toggle("show");
+$("snd").onclick=()=>{somOn=!somOn;destravar();$("snd").classList.toggle("on",somOn);$("snd").textContent="🔔 Alerta: "+(somOn?"ligado":"desligado");};
+function mudouCfg(){
+  cfg.a=$("selA").value;cfg.b=$("selB").value;cfg.s1=$("som1").value;cfg.s2=$("som2").value;cfg.s12=$("som12").value;salvar();
+  prevCmp=null;sigAnt=null;if(ultimo)render(ultimo);
+}
+["selA","selB","som1","som2","som12"].forEach(id=>$(id).onchange=mudouCfg);
+atualizar();
+</script>
+</body>
+</html>
